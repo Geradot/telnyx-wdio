@@ -1,0 +1,10 @@
+{
+  "0": {
+    "title": "Native-speech pipeline",
+    "description": "Stream voice, transcription, and model output through a unified in-house builder to minimize latency and jitter."
+  },
+  "5": {
+    "title": "EU AI Infrastructure",
+    "description": "Deploy Voice AI Agents with low-latency processing and local data storage anchored in our Paris GPU PoP to meet GDPR requirements."
+  }
+}

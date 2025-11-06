@@ -1,0 +1,40 @@
+{
+  "main": {
+    "url": "/",
+    "ai tabs": {
+      "hd voice ai": {
+        "tab name": "HD Voice AI"
+      },
+      "text to speech": {
+        "tab name": "Text to speech",
+        "roles": [
+          {
+            "name": "Healthcare coordinator",
+            "checking text": "your healthcare coordinator"
+          },
+          {
+            "name": "Customer service",
+            "checking text": "customer service team"
+          },
+          {
+            "name": "Sales representative",
+            "checking text": "from our sales team"
+          }
+        ]
+      },
+      "speech to text": {
+        "tab": {
+          "name": "Speech to text"
+        }
+      }
+    }
+  },
+  "sign up": {
+    "url": "/sign-up",
+    "page heading": "Create a Telnyx account"
+  },
+  "contact us": {
+    "url": "/contact-us",
+    "page heading": "Talk to an expert"
+  }
+}

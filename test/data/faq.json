@@ -1,0 +1,10 @@
+{
+  "0": {
+    "question": "What is PoP in networking?",
+    "answer": "PoP stands for point of presence. In the context of CPaaS providers with global IP networks, a PoP is a location where the IP carrier has network and switching equipment that takes your call from the public internet to the carrier's proprietary network and sends it directly to another PoP elsewhere in the network."
+  },
+  "3": {
+    "question": "What is MPLS?",
+    "answer": "MPLS (Multiprotocol Label Switching) is a network protocol used to improve the performance and manageability of communication networks. MPLS attaches labels to packets as they enter the MPLS network. These labels are short, fixed-length identifiers that provide information on how the packet should be forwarded through the network. This process is more efficient than traditional IP routing, which requires routers to examine the entire packet header to determine the next hop. MPLS is widely used in telecommunications and enterprise networks to create virtual private networks (VPNs), support traffic engineering, and improve network performance."
+  }
+}

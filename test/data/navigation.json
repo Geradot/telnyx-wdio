@@ -1,0 +1,34 @@
+{
+  "products": {
+    "title": "Products",
+    "submenu": {
+      "voice": {
+        "voice ai": {
+          "url": "/products/voice-ai",
+          "title": "Voice AI",
+          "page heading": "Voice AI Agents"
+        }
+      }
+    }
+  },
+  "solutions": {
+    "title": "Solutions",
+    "submenu": {
+      "healthcare": {
+        "url": "/solutions/healthcare",
+        "title": "Healthcare",
+        "page heading": "Intelligent AI Agents for healthcare"
+      }
+    }
+  },
+  "why telnyx": {
+    "title": "Why Telnyx",
+    "submenu": {
+      "our network": {
+        "url": "/our-network",
+        "title": "Our Network",
+        "page heading": "Our private, global network"
+      }
+    }
+  }
+}
