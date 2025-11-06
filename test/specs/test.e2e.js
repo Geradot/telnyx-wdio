@@ -18,51 +18,41 @@ describe("Testing Telnyx.com", () => {
   });
 
   it("TC-1: Clicking the 'Start building for free' button opens the registration page", async () => {
-    await mainPage.openTheMenuItem(mainPage.products);
-    await mainPage.openTheMenuItem(mainPage.voiceAi);
-    await voiceAiPage.checkUrl(voiceAiPage.url);
-    await voiceAiPage.checkPageHeadingDisplayed(voiceAiPage.heading);
+    await mainPage.openTheMenuItem(
+      mainPage.products.title,
+      mainPage.voiceAi.title
+    );
+    await voiceAiPage.checkThePage(voiceAiPage.voiceAi);
     await voiceAiPage.clickStartBuildingBtn();
-    await signUpPage.checkUrl(signUpPage.url);
-    await signUpPage.checkPageHeadingDisplayed(signUpPage.heading);
+    await signUpPage.checkThePage(signUpPage.signUp);
   });
 
   it("TC-2: Changing the Role also changes the spoken text in the 'Text to speech' tab", async () => {
-    const role1 = pages.main["ai tabs"]["text to speech"].roles[0];
-    const role2 = pages.main["ai tabs"]["text to speech"].roles[1];
-
     // Ad-hoc because sometimes the test does not pass on the Desktop size.
     // Something happens with website’s layout.
     await browser.setWindowSize(heightOfScreen, widthOfScreen);
 
     await mainPage.clickCallAgentBtn();
-    await mainPage.checkAiTabsVisible();
     await mainPage.checkAiTabActive(mainPage.hdVoiceAiTabName);
     await mainPage.clickAiTab(mainPage.textToSpeechTabName);
-    await mainPage.checkAiTabActive(mainPage.textToSpeechTabName);
     await mainPage.checkPlayAudioBtnExist();
-    await mainPage.checkTextarea(role1["checking text"]);
+    await mainPage.checkTextarea(mainPage.role1["checking text"]);
     await mainPage.clickRoleSelect();
-    await mainPage.selectRole(role2.name);
-    await mainPage.checkTextarea(role2["checking text"]);
+    await mainPage.selectRole(mainPage.role2.name);
+    await mainPage.checkTextarea(mainPage.role2["checking text"]);
   });
 
   it("TC-3: Clicking the 'Contact us' link opens it", async () => {
-    const contactUs = pages["contact us"];
     await mainPage.clickContactUsLink();
-    await mainPage.checkUrl(contactUs.url);
-    await mainPage.checkPageHeadingDisplayed(contactUs["page heading"]);
+    await mainPage.checkThePage(mainPage.contactUs);
   });
 
   it("TC-4: Clicking on a collapsible element reveals hidden text on the main page", async () => {
-    const [firstKey] = Object.keys(capabilities).at(0);
-    const [lastKey, lastValue] = Object.entries(capabilities).at(-1);
-
     await mainPage.checkAccordionVisible();
-    await mainPage.checkActiveTabInAccordion(+firstKey);
-    await mainPage.clickTabInAccordion(lastValue.title);
-    await mainPage.checkActiveTabInAccordion(+lastKey);
-    await mainPage.checkTabText(lastValue.description);
+    await mainPage.checkActiveTabInAccordion(+mainPage.firstKey);
+    await mainPage.clickTabInAccordion(mainPage.lastValue.title);
+    await mainPage.checkActiveTabInAccordion(+mainPage.lastKey);
+    await mainPage.checkTabText(mainPage.lastValue.description);
   });
 
   it("TC-5: Clicking on the arrow reveals the next code example", async () => {
@@ -73,13 +63,11 @@ describe("Testing Telnyx.com", () => {
   });
 
   it("TC-6: Clicking on a collapsible element reveals hidden text on the 'Our Network' page", async () => {
-    const nav = navigation["why telnyx"];
-    await mainPage.openTheMenuItem(nav.title);
-    await mainPage.openTheMenuItem(nav.submenu["our network"].title);
-    await ourNetworkPage.checkUrl(nav.submenu["our network"].url);
-    await ourNetworkPage.checkPageHeadingDisplayed(
-      nav.submenu["our network"]["page heading"]
+    await mainPage.openTheMenuItem(
+      mainPage.whyTelnyx.title,
+      mainPage.ourNetwork.title
     );
+    await ourNetworkPage.checkThePage(ourNetworkPage.ourNetwork);
     await ourNetworkPage.checkFAQSectionVisible();
     await ourNetworkPage.scrollToSection();
     await ourNetworkPage.checkAmountOfQuestions();
@@ -87,16 +75,12 @@ describe("Testing Telnyx.com", () => {
       ourNetworkPage.firstValue.question
     );
     await ourNetworkPage.openTheQuestion(ourNetworkPage.lastValue.question);
-    await ourNetworkPage.checkQuestionOpened(ourNetworkPage.lastValue.question);
     await ourNetworkPage.checkQuestionClosed(
       ourNetworkPage.firstValue.question
     );
   });
 
-  it.only('TC-7: A relevant YouTube link is bound to every case on the "Healthcare" page', async () => {
-    await mainPage.openTheMenuItem(mainPage.solutions);
-    await mainPage.openTheMenuItem(mainPage.healthcare);
-    
-    
+  it('TC-7: A relevant YouTube link is bound to every case on the "Healthcare" page', async () => {
+    await mainPage.openTheMenuItem(mainPage.solutions, mainPage.healthcare);
   });
 });

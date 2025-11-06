@@ -1,6 +1,8 @@
 {
   "main": {
     "url": "/",
+    "title": "Main page",
+    "page heading": "Speech to Text",
     "ai tabs": {
       "hd voice ai": {
         "tab name": "HD Voice AI"
@@ -23,18 +25,18 @@
         ]
       },
       "speech to text": {
-        "tab": {
-          "name": "Speech to text"
-        }
+        "tab name": "Speech to text"
       }
     }
   },
   "sign up": {
     "url": "/sign-up",
+    "title": "Sign Up",
     "page heading": "Create a Telnyx account"
   },
   "contact us": {
     "url": "/contact-us",
+    "title": "Contact Us",
     "page heading": "Talk to an expert"
   }
 }

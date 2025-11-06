@@ -85,6 +85,7 @@ class OurNetworkPage extends Page {
     await step(`Click the "${truncateByWords(question)}" question`, async () => {
       const questionElement = await this.getQuestion(question);
       await questionElement.click();
+      await this.checkQuestionOpened(question);
     });
   }
 

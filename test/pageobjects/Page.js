@@ -1,6 +1,5 @@
 import { step } from "../helpers/utils";
 import { expect } from "@wdio/globals";
-import healthcareCases from "../data/healthcare-cases.json";
 import navigation from "../data/navigation.json";
 
 class Page {
@@ -11,14 +10,16 @@ class Page {
   matchToAriaSelected = ["aria-selected", "true"];
 
   // "Products" menu
-  products = navigation.products.title;
-  voiceAi = navigation.products.submenu.voice["voice ai"].title;
+  products = navigation.products;
+  voiceAi = this.products.submenu.voice["voice ai"];
+
+  // "Why Telnyx" menu
+  whyTelnyx = navigation["why telnyx"];
+  ourNetwork = this.whyTelnyx.submenu["our network"];
 
   // "Solutions" menu
-  solutions = navigation.solutions.title;
-  healthcare = navigation.solutions.submenu.healthcare.title;
-
-  
+  solutions = navigation.solutions;
+  healthcare = this.solutions.submenu.healthcare;
 
   get getNavItems() {
     return $("div#main-menu-content");
@@ -30,13 +31,6 @@ class Page {
 
   get getPageName() {
     return $("h1");
-  }
-
-  async checkPageHeadingDisplayed(name) {
-    await step(`"${name}" page heading is displayed`, async () => {
-      const element = await $(`h1*=${name}`);
-      await expect(element).toBeDisplayed();
-    });
   }
 
   async getSectionByName(title) {
@@ -51,20 +45,50 @@ class Page {
     });
   }
 
-  async openTheMenuItem(title) {
-    await step(`Open "${title}" menu item`, async () => {
+  /**
+   * Open a menu item
+   * @param {string} menu Navigation menu item
+   * @param {null | string} submenu Set if the menu has a submenu
+   */
+  async openTheMenuItem(menu, submenu = null) {
+    const label = submenu ? `"${menu}" → "${submenu}"` : `"${menu}"`;
+    await step(`Open ${label} menu item`, async () => {
       const nav = await this.getNavItems;
       await expect(nav).toBeDisplayed();
 
-      const item = await nav.$(`*=${title}`);
+      const item = await nav.$(`*=${menu}`);
       await expect(item).toBeDisplayed();
       await item.click();
+
+      if (submenu) {
+        const subItem = await nav.$(`*=${submenu}`);
+        await expect(subItem).toBeDisplayed();
+        await subItem.click();
+      }
     });
   }
 
   async checkUrl(expected) {
     await step(`Check that URL contains "${expected}"`, async () => {
       await expect(browser).toHaveUrl(expect.stringContaining(expected));
+    });
+  }
+
+  async checkPageHeadingDisplayed(name) {
+    await step(`"${name}" page heading is displayed`, async () => {
+      const element = await $(`h1*=${name}`);
+      await expect(element).toBeDisplayed();
+    });
+  }
+
+  /**
+   * Check that the specified page is opened
+   * @param {object} page Page object with "url", "title" and "page heading" properties
+   */
+  async checkThePage(page) {
+    await step(`Check that the "${page.title}" page is opened`, async () => {
+      await this.checkUrl(page.url);
+      await this.checkPageHeadingDisplayed(page["page heading"]);
     });
   }
 

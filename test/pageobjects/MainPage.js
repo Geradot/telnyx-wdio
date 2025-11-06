@@ -1,14 +1,33 @@
 // test/pageobjects/MainPage.js
 import Page from "./Page.js";
 import pages from "../data/pages.json" assert { type: "json" };
-import navigation from "../data/navigation.json" assert { type: "json" };
-import { step, truncateByWords } from "../helpers/utils.js";
+import capabilities from "../data/capabilities.json";
+import {
+  step,
+  truncateByWords,
+  formatOrdinalSuffix,
+} from "../helpers/utils.js";
 
 class MainPage extends Page {
-
   // "Interaction with AI" block
   hdVoiceAiTabName = pages.main["ai tabs"]["hd voice ai"]["tab name"];
   textToSpeechTabName = pages.main["ai tabs"]["text to speech"]["tab name"];
+
+  // Roles in "Text to speech" tab
+  role1 = pages.main["ai tabs"]["text to speech"].roles[0];
+  role2 = pages.main["ai tabs"]["text to speech"].roles[1];
+
+  // "Contact us" link
+  contactUs = pages["contact us"];
+
+  constructor() {
+    super();
+    const [firstKey] = Object.keys(capabilities).at(0);
+    const [lastKey, lastValue] = Object.entries(capabilities).at(-1);
+    this.firstKey = firstKey;
+    this.lastKey = lastKey;
+    this.lastValue = lastValue;
+  }
 
   get callAgentBtn() {
     return $("span[data-content='CALL YOUR AGENT']");
@@ -96,6 +115,7 @@ class MainPage extends Page {
       async () => {
         await expect(this.callAgentBtn).toBeExisting();
         await this.callAgentBtn.click();
+        await this.checkAiTabsVisible();
       }
     );
   }
@@ -105,6 +125,7 @@ class MainPage extends Page {
       const tab = await this.aiTab(tabName);
       await expect(tab).toBeDisplayed();
       await tab.click();
+      await this.checkAiTabActive(tabName);
     });
   }
 
@@ -159,18 +180,19 @@ class MainPage extends Page {
   }
 
   async checkActiveTabInAccordion(index = 0) {
-    await step(`The tab at index ${index} is active`, async () => {
-      const tab = (await this.accordionTabs)[index];
-      await expect(tab).toHaveAttribute(...this.matchToAriaSelected);
-      await expect(tab).toHaveAttribute(...this.matchToDataStateActive);
-    });
+    await step(
+      `The ${formatOrdinalSuffix(index + 1)} tab is active`,
+      async () => {
+        const tab = (await this.accordionTabs)[index];
+        await expect(tab).toHaveAttribute(...this.matchToAriaSelected);
+        await expect(tab).toHaveAttribute(...this.matchToDataStateActive);
+      }
+    );
   }
 
   async checkTabText(expectedText) {
     await step(
-      `The text for the active tab is displayed: "${truncateByWords(
-        expectedText
-      )}"`,
+      `"${truncateByWords(expectedText)}" text for the active tab is displayed`,
       async () => {
         const paragraph = await $(`p*=${expectedText}`);
         await expect(paragraph).toBeExisting();
@@ -181,10 +203,13 @@ class MainPage extends Page {
   }
 
   async checkTextarea(substr) {
-    await step("Text in Textarea contains expected text", async () => {
-      const textareaValue = await this.textarea.getValue();
-      expect(textareaValue).toContain(substr);
-    });
+    await step(
+      `Textarea contains "${truncateByWords(substr)}" text`,
+      async () => {
+        const textareaValue = await this.textarea.getValue();
+        expect(textareaValue).toContain(substr);
+      }
+    );
   }
 
   async checkAiTabsVisible() {
@@ -192,7 +217,6 @@ class MainPage extends Page {
       "The page is scrolled to the AI tabs and the tabs are visible",
       async () => {
         const tab = await this.aiTab(this.hdVoiceAiTabName);
-        await tab.scrollIntoView();
         await expect(tab).toBeDisplayed();
       }
     );
