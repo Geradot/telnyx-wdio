@@ -71,7 +71,7 @@ class OurNetworkPage extends Page {
     });
   }
 
-  async checkAmountOfQuestions() {
+  async checkAmountOfItems() {
     await step(
       `There are ${amountFAQ} questions in the "FAQ" section`,
       async () => {
@@ -82,11 +82,14 @@ class OurNetworkPage extends Page {
   }
 
   async openTheQuestion(question) {
-    await step(`Click the "${truncateByWords(question)}" question`, async () => {
-      const questionElement = await this.getQuestion(question);
-      await questionElement.click();
-      await this.checkQuestionOpened(question);
-    });
+    await step(
+      `Click the "${truncateByWords(question)}" question`,
+      async () => {
+        const questionElement = await this.getQuestion(question);
+        await questionElement.click();
+        await this.checkQuestionOpened(question);
+      }
+    );
   }
 
   async scrollToSection(sectionName = "FAQ") {

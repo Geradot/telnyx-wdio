@@ -92,8 +92,13 @@ class Page {
     });
   }
 
-  async checkAmountOfItems(length, expectedLength) {
-    await expect(length).toEqual(expectedLength);
+  /**
+   * Check the amount of items in the particular section
+   * @param {number} itemsAmount
+   * @param {number} expectedAmount
+   */
+  async checkAmountOfItems(itemsAmount, expectedAmount) {
+    await expect(itemsAmount).toEqual(expectedAmount);
   }
 
   async open(url) {

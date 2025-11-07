@@ -2,16 +2,13 @@ import mainPage from "../pageobjects/MainPage.js";
 import voiceAiPage from "../pageobjects/Products/VoiceAi.js";
 import ourNetworkPage from "../pageobjects/Why Telnyx/OurNetworkPage.js";
 import signUpPage from "../pageobjects/SignUpPage.js";
-import pages from "../data/pages.json";
-import capabilities from "../data/capabilities.json";
-import navigation from "../data/navigation.json";
+import healthcarePage from "../pageobjects/Solutions/HealthcarePage.js";
 
 const widthOfScreen = 1440;
 const heightOfScreen = 900;
 
 describe("Testing Telnyx.com", () => {
   beforeEach(async () => {
-    // await browser.reloadSession();
     await browser.setWindowSize(widthOfScreen, heightOfScreen);
     await mainPage.open();
     await mainPage.checkUrl("/");
@@ -70,7 +67,7 @@ describe("Testing Telnyx.com", () => {
     await ourNetworkPage.checkThePage(ourNetworkPage.ourNetwork);
     await ourNetworkPage.checkFAQSectionVisible();
     await ourNetworkPage.scrollToSection();
-    await ourNetworkPage.checkAmountOfQuestions();
+    await ourNetworkPage.checkAmountOfItems();
     await ourNetworkPage.checkQuestionOpened(
       ourNetworkPage.firstValue.question
     );
@@ -81,6 +78,12 @@ describe("Testing Telnyx.com", () => {
   });
 
   it('TC-7: A relevant YouTube link is bound to every case on the "Healthcare" page', async () => {
-    await mainPage.openTheMenuItem(mainPage.solutions, mainPage.healthcare);
+    await mainPage.openTheMenuItem(
+      mainPage.solutions.title,
+      mainPage.healthcare.title
+    );
+    await healthcarePage.scrollToCases();
+    await healthcarePage.checkAmountOfItems();
+    await healthcarePage.checkYouTubeLinks();
   });
 });
