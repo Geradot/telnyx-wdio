@@ -5,6 +5,12 @@ export const config = {
   runner: "local",
   baseUrl: "https://telnyx.com",
   specs: ["./test/specs/**/*.js"],
+  suites: {
+    mainPage: ["./test/specs/mainPage.e2e.js"],
+    whyTelnyx: ["./test/specs/Why Telnyx/ourNetworkPage.e2e.js"],
+    solutions: ["./test/specs/Solutions/healthcarePage.e2e.js"],
+    products: ["./test/specs/Products/voiceAi.e2e.js"],
+  },
   maxInstances: 1,
 
   capabilities: [
@@ -14,7 +20,7 @@ export const config = {
       "goog:chromeOptions":
         browser === "chrome"
           ? {
-              args: isHeadless ? ["--headless", "--disable-gpu"] : [],
+              args: isHeadless ? ["--headless=new", "--disable-gpu"] : [],
             }
           : {},
       "moz:firefoxOptions":

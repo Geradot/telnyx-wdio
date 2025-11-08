@@ -1,10 +1,17 @@
+import { step } from "@wdio/allure-reporter";
 import Page from "../Page";
 import healthcareCases from "../../data/healthcare-cases.json";
-import { step, truncateByWords } from "../../helpers/utils";
+import navigation from "../../data/navigation.json";
+import { truncateByWords } from "../../helpers/utils";
 
 class HealthcarePage extends Page {
   healthCareCases = Object.keys(healthcareCases);
   healthCareLinks = Object.values(healthcareCases);
+
+  constructor() {
+    super();
+    this.healthcarePage = navigation.solutions.submenu["healthcare"];
+  }
 
   get casesSection() {
     return $("//div[@aria-label='USE CASES']");
@@ -47,11 +54,23 @@ class HealthcarePage extends Page {
             caseName
           )}" case has a relevant YouTube link`,
           async () => {
-            const caseTab = await this.casesSection.$(
-              `.//button[contains(normalize-space(), "${caseName}")]`
+            const caseTab = await $(
+              `//button[@role='tab' and contains(., "${caseName}")]`
             );
-            await caseTab.click();
-            const youtubeLinkElement = await this.casesSection.$(`.//a`);
+            await caseTab.scrollIntoView();
+
+            try {
+              await caseTab.waitForClickable({ timeout: 3000 });
+              await caseTab.click();
+            } catch (e) {
+              // Fallback to JavaScript click for headless mode
+              await browser.execute((el) => el.click(), caseTab);
+            }
+
+            const youtubeLinkElement = await $(
+              `//div[@aria-label='USE CASES']//a`
+            );
+            await youtubeLinkElement.waitForExist({ timeout: 5000 });
             await expect(youtubeLinkElement).toHaveAttribute(
               "href",
               expect.stringContaining(expectedLink)
@@ -67,7 +86,7 @@ class HealthcarePage extends Page {
   }
 
   async open() {
-    await super.open();
+    await super.open(this.healthcarePage);
   }
 }
 export default new HealthcarePage();

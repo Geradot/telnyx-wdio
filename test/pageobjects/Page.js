@@ -1,4 +1,4 @@
-import { step } from "../helpers/utils";
+import { step } from "@wdio/allure-reporter";
 import { expect } from "@wdio/globals";
 import navigation from "../data/navigation.json";
 
@@ -8,18 +8,6 @@ class Page {
   matchToDataStateOpen = ["data-state", "open"];
   matchToDataStateClosed = ["data-state", "closed"];
   matchToAriaSelected = ["aria-selected", "true"];
-
-  // "Products" menu
-  products = navigation.products;
-  voiceAi = this.products.submenu.voice["voice ai"];
-
-  // "Why Telnyx" menu
-  whyTelnyx = navigation["why telnyx"];
-  ourNetwork = this.whyTelnyx.submenu["our network"];
-
-  // "Solutions" menu
-  solutions = navigation.solutions;
-  healthcare = this.solutions.submenu.healthcare;
 
   get getNavItems() {
     return $("div#main-menu-content");
@@ -69,7 +57,7 @@ class Page {
   }
 
   async checkUrl(expected) {
-    await step(`Check that URL contains "${expected}"`, async () => {
+    await step(`URL contains "${expected}"`, async () => {
       await expect(browser).toHaveUrl(expect.stringContaining(expected));
     });
   }
@@ -86,7 +74,7 @@ class Page {
    * @param {object} page Page object with "url", "title" and "page heading" properties
    */
   async checkThePage(page) {
-    await step(`Check that the "${page.title}" page is opened`, async () => {
+    await step(`Check the "${page.title}" page"`, async () => {
       await this.checkUrl(page.url);
       await this.checkPageHeadingDisplayed(page["page heading"]);
     });
@@ -101,9 +89,20 @@ class Page {
     await expect(itemsAmount).toEqual(expectedAmount);
   }
 
-  async open(url) {
-    await step(`Open "${url}"`, async () => {
-      await browser.url(url);
+  async closeCookiesBanner() {
+    await step("Close the cookies banner", async () => {
+      const banner = await $("#onetrust-close-btn-container");
+      await banner.waitForDisplayed();
+      await banner.click();
+    });
+  }
+
+  async open(page) {
+    await step(`Open the "${page.title}" page`, async () => {
+      await browser.url(page.url);
+      await this.checkThePage(page);
+      await this.closeCookiesBanner();
+      await browser.pause(1000);
     });
   }
 }

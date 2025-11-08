@@ -1,11 +1,14 @@
 import Page from "../Page";
-import { capitalize, step } from "../../helpers/utils";
+import { capitalize } from "../../helpers/utils";
+import { step } from "@wdio/allure-reporter";
 import navigation from "../../data/navigation.json";
 
 class VoiceAiPage extends Page {
-  btnText = "START BUILDING FOR FREE";
-  heading = navigation.products.submenu.voice["voice ai"]["page heading"];
-  url = navigation.products.submenu.voice["voice ai"].url;
+  constructor() {
+    super();
+    this.btnText = "START BUILDING FOR FREE";
+    this.voiceAi = navigation.products.submenu.voice["voice ai"];
+  }
 
   async getStartBuildingBtn() {
     const formattedText = capitalize(this.btnText);
@@ -18,6 +21,10 @@ class VoiceAiPage extends Page {
       await button.waitForDisplayed();
       await button.click();
     });
+  }
+
+  async open() {
+    await super.open(this.voiceAi);
   }
 }
 

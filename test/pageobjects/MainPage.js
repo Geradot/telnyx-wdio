@@ -1,23 +1,17 @@
-// test/pageobjects/MainPage.js
+import { step } from "@wdio/allure-reporter";
 import Page from "./Page.js";
-import pages from "../data/pages.json" assert { type: "json" };
+import pages from "../data/pages.json";
 import capabilities from "../data/capabilities.json";
-import {
-  step,
-  truncateByWords,
-  formatOrdinalSuffix,
-} from "../helpers/utils.js";
+import { truncateByWords, formatOrdinalSuffix } from "../helpers/utils.js";
 
 class MainPage extends Page {
-  // "Interaction with AI" block
   hdVoiceAiTabName = pages.main["ai tabs"]["hd voice ai"]["tab name"];
   textToSpeechTabName = pages.main["ai tabs"]["text to speech"]["tab name"];
 
-  // Roles in "Text to speech" tab
   role1 = pages.main["ai tabs"]["text to speech"].roles[0];
   role2 = pages.main["ai tabs"]["text to speech"].roles[1];
 
-  // "Contact us" link
+  mainPage = pages.main;
   contactUs = pages["contact us"];
 
   constructor() {
@@ -105,7 +99,7 @@ class MainPage extends Page {
     await step(`Click the "${title}" tab`, async () => {
       const tab = await this.accordionTab(title);
       await expect(tab).toBeDisplayed();
-      await tab.click();
+      await browser.execute((el) => el.click(), tab);
     });
   }
 
@@ -240,7 +234,7 @@ class MainPage extends Page {
   }
 
   async open() {
-    return await super.open("/");
+    await super.open(this.mainPage);
   }
 
   async scrollToSection(sectionName = "FOR DEVELOPERS") {

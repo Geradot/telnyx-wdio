@@ -2,12 +2,17 @@ import Page from "../Page";
 import faq from "../../data/faq.json";
 import { step } from "@wdio/allure-reporter";
 import { truncateByWords } from "../../helpers/utils";
+import navigation from "../../data/navigation.json";
+
 
 const amountFAQ = 5;
 
 class OurNetworkPage extends Page {
   constructor() {
     super();
+    
+    this.whyTelnyx = navigation["why telnyx"];
+    this.ourNetwork = this.whyTelnyx.submenu["our network"];
     const [firstKey, firstValue] = Object.entries(faq).at(0);
     const [lastKey, lastValue] = Object.entries(faq).at(-1);
     this.firstKey = firstKey;
@@ -94,6 +99,10 @@ class OurNetworkPage extends Page {
 
   async scrollToSection(sectionName = "FAQ") {
     await super.scrollToSection(sectionName);
+  }
+
+  async open() {
+    await super.open(this.ourNetwork);
   }
 }
 

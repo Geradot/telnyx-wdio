@@ -1,14 +1,8 @@
-import allureReporter from "@wdio/allure-reporter";
-
-export async function step(name, fn) {
-  allureReporter.startStep(name);
-  try {
-    await fn();
-  } finally {
-    allureReporter.endStep();
-  }
-}
-
+/**
+ * Capitalizes the first letter of a string and lowercases the rest.
+ * @param {string} str The input string
+ * @returns {string} Capitalized text
+ */
 export const capitalize = (str) =>
   typeof str === "string"
     ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()

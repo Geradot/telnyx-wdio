@@ -1,8 +1,8 @@
 {
   "main": {
     "url": "/",
-    "title": "Main page",
-    "page heading": "Speech to Text",
+    "title": "Main",
+    "page heading": "Conversational AI",
     "ai tabs": {
       "hd voice ai": {
         "tab name": "HD Voice AI"

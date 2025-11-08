@@ -11,6 +11,10 @@
     "test:chrome": "cross-env BROWSER=chrome wdio run wdio.conf.js",
     "test:firefox": "cross-env BROWSER=firefox wdio run wdio.conf.js",
     "test:headless": "cross-env HEADLESS=true wdio run wdio.conf.js",
+    "test:headless:main": "cross-env HEADLESS=true wdio run wdio.conf.js --suite mainPage",
+    "test:headless:whyTelnyx": "cross-env HEADLESS=true wdio run wdio.conf.js --suite whyTelnyx",
+    "test:headless:solutions": "cross-env HEADLESS=true wdio run wdio.conf.js --suite solutions",
+    "test:headless:products": "cross-env HEADLESS=true wdio run wdio.conf.js --suite products",
     "report": "allure generate allure-results --clean && allure open"
   },
   "devDependencies": {
