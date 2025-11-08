@@ -1,0 +1,115 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Setup Google Chrome
+        if: matrix.browser == 'chrome'
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Setup ChromeDriver
+        if: matrix.browser == 'chrome'
+        uses: nanasess/setup-chromedriver@v2
+
+      - name: Setup Firefox
+        if: matrix.browser == 'firefox'
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+
+      - name: Setup Geckodriver
+        if: matrix.browser == 'firefox'
+        uses: browser-actions/setup-geckodriver@v1
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run headless tests
+        env:
+          BROWSER: ${{ matrix.browser }}
+          HEADLESS: "true"
+        run: npm run test:headless
+
+      - name: Upload allure results (${{ matrix.browser }})
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.browser }}
+          path: allure-results
+          if-no-files-found: warn
+
+  report:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download allure results (chrome)
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-chrome
+          path: allure-results/chrome
+
+      - name: Download allure results (firefox)
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-firefox
+          path: allure-results/firefox
+
+      - name: Merge allure results
+        run: |
+          mkdir -p merged-results
+          cp -r allure-results/chrome/* merged-results/ || true
+          cp -r allure-results/firefox/* merged-results/ || true
+
+      - name: Generate Allure report
+        uses: simple-elf/allure-report-action@v1
+        with:
+          allure_results: merged-results
+          report_dir: allure-report
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+
+  deploy:
+    needs: report
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
