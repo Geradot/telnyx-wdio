@@ -35,23 +35,23 @@ jobs:
 
       - name: Setup Google Chrome
         if: matrix.browser == 'chrome'
-        uses: browser-actions/setup-chrome@v1
+        uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: stable
 
       - name: Setup ChromeDriver
         if: matrix.browser == 'chrome'
-        uses: nanasess/setup-chromedriver@v2
+        uses: nanasess/setup-chromedriver@latest
 
       - name: Setup Firefox
         if: matrix.browser == 'firefox'
-        uses: browser-actions/setup-firefox@v1
+        uses: browser-actions/setup-firefox@latest
         with:
           firefox-version: latest
 
       - name: Setup Geckodriver
         if: matrix.browser == 'firefox'
-        uses: browser-actions/setup-geckodriver@v1
+        uses: browser-actions/setup-geckodriver@latest
 
       - name: Install dependencies
         run: npm install
