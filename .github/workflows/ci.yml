@@ -65,10 +65,10 @@ jobs:
           path: allure-results
 
       - name: Generate Allure report
-        uses: simple-elf/allure-report-action@v1
+        uses: qa-reports/allure-action@v2
         with:
-          allure_results: allure-results
-          report_dir: allure-report
+          results: allure-results
+          report-dir: allure-report
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
