@@ -58,31 +58,33 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download allure results
         uses: actions/download-artifact@v4
         with:
           name: allure-results
           path: allure-results
 
-      - name: Generate Allure report
-        uses: qa-reports/allure-action@v2
+      - name: Setup Java for Allure
+        if: always()
+        uses: actions/setup-java@v3
         with:
-          results: allure-results
-          report-dir: allure-report
+          distribution: temurin
+          java-version: 25
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Install Allure CLI 
+        if: always()
+        run: npm install -g allure-commandline
+
+      - name: Generate Allure Report
+        if: always()
+        run: allure generate allure-results --clean -o allure-report
+
+      - name: Deploy Allure Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: allure-report
-
-  deploy:
-    needs: report
-    if: success()
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
