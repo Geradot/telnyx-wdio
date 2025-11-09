@@ -49,7 +49,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-chrome
+          name: allure-results
           path: allure-results
           if-no-files-found: warn
 
@@ -61,18 +61,13 @@ jobs:
       - name: Download allure results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-chrome
-          path: allure-results/chrome
-
-      - name: Merge allure results
-        run: |
-          mkdir -p merged-results
-          cp -r allure-results/chrome/* merged-results/ || true
+          name: allure-results
+          path: allure-results
 
       - name: Generate Allure report
         uses: simple-elf/allure-report-action@v1
         with:
-          allure_results: merged-results
+          allure_results: allure-results
           report_dir: allure-report
 
       - name: Upload Pages artifact
