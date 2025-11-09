@@ -24,8 +24,6 @@ export const config = {
                 ? [
                     "--headless=new",
                     "--disable-gpu",
-                    "--no-sandbox",
-                    "--disable-dev-shm-usage",
                   ]
                 : [],
             }
