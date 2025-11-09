@@ -20,7 +20,14 @@ export const config = {
       "goog:chromeOptions":
         browser === "chrome"
           ? {
-              args: isHeadless ? ["--headless=new", "--disable-gpu"] : [],
+              args: isHeadless
+                ? [
+                    "--headless=new",
+                    "--disable-gpu",
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage",
+                  ]
+                : [],
             }
           : {},
       "moz:firefoxOptions":

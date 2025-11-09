@@ -1,5 +1,6 @@
-# Use Selenium standalone image with Chrome
-FROM selenium/standalone-chrome:latest
+# Base image can be Chrome or Firefox selenium standalone
+ARG BASE_IMAGE=selenium/standalone-chrome:latest
+FROM ${BASE_IMAGE}
 
 # Switch to root to install Node.js
 USER root
@@ -29,6 +30,9 @@ RUN mkdir -p allure-results allure-report
 
 # Set permissions
 RUN chmod -R 777 allure-results allure-report
+
+# Switch back to non-root user provided by Selenium images
+USER seluser
 
 # Default command - run tests
 CMD ["npm", "run", "test:headless"]

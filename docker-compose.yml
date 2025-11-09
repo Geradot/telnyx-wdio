@@ -3,7 +3,10 @@ version: "3.8"
 services:
   # Service for running tests in Chrome
   tests-chrome:
-    build: .
+    build:
+      context: .
+      args:
+        BASE_IMAGE: selenium/standalone-chrome:latest
     environment:
       - BROWSER=chrome
       - HEADLESS=true
@@ -14,7 +17,10 @@ services:
 
   # Service for running tests in Firefox
   tests-firefox:
-    build: .
+    build:
+      context: .
+      args:
+        BASE_IMAGE: selenium/standalone-firefox:latest
     environment:
       - BROWSER=firefox
       - HEADLESS=true

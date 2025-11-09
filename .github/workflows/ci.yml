@@ -20,8 +20,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: docker build -t telnyx-wdio:latest .
+      - name: Build Docker image (per browser)
+        run: docker build --build-arg BASE_IMAGE=selenium/standalone-${{ matrix.browser }}:latest -t telnyx-wdio:${{ matrix.browser }} .
 
       - name: Run WDIO tests in Docker
         run: |
@@ -29,7 +29,7 @@ jobs:
             -e BROWSER=${{ matrix.browser }} \
             -e HEADLESS=true \
             -v ${{ github.workspace }}/allure-results:/app/allure-results \
-            telnyx-wdio:latest
+            telnyx-wdio:${{ matrix.browser }}
 
       - name: Setup Java for Allure
         if: always()
