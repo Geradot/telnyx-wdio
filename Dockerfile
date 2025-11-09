@@ -1,5 +1,16 @@
-# Use official Node.js image with pre-installed browsers
-FROM mcr.microsoft.com/playwright:v1.49.0-jammy
+# Use Selenium standalone image with Chrome
+FROM selenium/standalone-chrome:latest
+
+# Switch to root to install Node.js
+USER root
+
+# Install Node.js 22.x
+RUN apt-get update && \
+  apt-get install -y curl && \
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+  apt-get install -y nodejs && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
