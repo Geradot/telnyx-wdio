@@ -34,7 +34,7 @@ jobs:
         run: npm install -g allure-commandline
 
       - name: Run WDIO tests
-        run: npx wdio run wdio.conf.js
+        run: npm run test:headless
 
       - name: Generate Allure Report
         if: always()
@@ -46,4 +46,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
-          
