@@ -7,8 +7,7 @@ on:
   pull_request:
 
 jobs:
-  # Tests in Docker container
-  wdio-docker:
+  wdio-tests:
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,16 +19,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Build Docker image (per browser)
-        run: docker build --build-arg BASE_IMAGE=selenium/standalone-${{ matrix.browser }}:latest -t telnyx-wdio:${{ matrix.browser }} .
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
 
-      - name: Run WDIO tests in Docker
-        run: |
-          docker run --rm \
-            -e BROWSER=${{ matrix.browser }} \
-            -e HEADLESS=true \
-            -v ${{ github.workspace }}/allure-results:/app/allure-results \
-            telnyx-wdio:${{ matrix.browser }}
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run WDIO tests
+        run: BROWSER=${{ matrix.browser }} HEADLESS=true npm run test:headless
 
       - name: Setup Java for Allure
         if: always()
