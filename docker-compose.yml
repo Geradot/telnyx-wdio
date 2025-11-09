@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  # Service for running tests in Chrome
+  tests-chrome:
+    build: .
+    environment:
+      - BROWSER=chrome
+      - HEADLESS=true
+    volumes:
+      # Mount test results to host
+      - ./allure-results:/app/allure-results
+    command: npm run test:headless
+
+  # Service for running tests in Firefox
+  tests-firefox:
+    build: .
+    environment:
+      - BROWSER=firefox
+      - HEADLESS=true
+    volumes:
+      - ./allure-results:/app/allure-results
+    command: npm run test:headless
+
+  # Service for generating Allure reports
+  allure:
+    image: frankescobar/allure-docker-service:latest
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./allure-results:/app/allure-results
+      - ./allure-report:/app/allure-report
+    environment:
+      - CHECK_RESULTS_EVERY_SECONDS=3
+      - KEEP_HISTORY=true
