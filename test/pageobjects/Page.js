@@ -93,7 +93,7 @@ class Page {
     await step("Close the cookies banner", async () => {
       const banner = await $("#onetrust-close-btn-container");
       await banner.waitForDisplayed();
-      await banner.click();
+      await banner.click({ force: true });
     });
   }
 
