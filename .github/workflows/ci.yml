@@ -1,71 +1,26 @@
-name: CI
+name: WDIO Tests
 
 on:
   push:
-    branches: ["**"]
+    branches:
+      - main
   pull_request:
-    branches: ["**"]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
 
 jobs:
-  test:
+  wdio-run:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Show preinstalled browser versions (informational)
-        continue-on-error: true
-        run: |
-          which google-chrome || which google-chrome-stable || which chromium-browser || true
-          (google-chrome --version || google-chrome-stable --version || chromium-browser --version) || true
-          chromedriver --version || true
+          node-version: 22
 
       - name: Install dependencies
         run: npm install
-
-      - name: Run headless tests (chrome)
-        env:
-          BROWSER: chrome
-          HEADLESS: "true"
-        run: npm run test:headless
-
-      - name: Upload allure results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: allure-results
-          if-no-files-found: warn
-
-  report:
-    needs: test
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download allure results
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-results
-          path: allure-results
 
       - name: Setup Java for Allure
         if: always()
@@ -74,15 +29,18 @@ jobs:
           distribution: temurin
           java-version: 25
 
-      - name: Install Allure CLI 
+      - name: Install Allure CLI
         if: always()
         run: npm install -g allure-commandline
+
+      - name: Run WDIO tests
+        run: npx wdio run wdio.conf.js
 
       - name: Generate Allure Report
         if: always()
         run: allure generate allure-results --clean -o allure-report
 
-      - name: Deploy Allure Report to GitHub Pages
+      - name: Deploy Allure Report to GitHub Pages (optional)
         if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
