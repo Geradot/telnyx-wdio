@@ -10,6 +10,11 @@ jobs:
   wdio-run:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        browser: [chrome, firefox]  # ← добавили Firefox сюда
+      fail-fast: false  # чтобы при падении одного браузера остальные всё равно запускались
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -33,15 +38,29 @@ jobs:
         if: always()
         run: npm install -g allure-commandline
 
+      - name: Show which browser is being tested
+        run: echo "Running tests on ${{ matrix.browser }}"
+
       - name: Run WDIO tests
+        env:
+          BROWSER: ${{ matrix.browser }}
+          HEADLESS: "true"
         run: npm run test:headless
 
       - name: Generate Allure Report
         if: always()
         run: allure generate allure-results --clean -o allure-report
 
-      - name: Deploy Allure Report to GitHub Pages (optional)
+      - name: Upload Allure report (artifact)
         if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-${{ matrix.browser }}
+          path: allure-report
+
+      # Отдельный деплой только один раз (чтобы не конфликтовали 2 браузера)
+      - name: Deploy Allure Report to GitHub Pages
+        if: matrix.browser == 'chrome' && always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
