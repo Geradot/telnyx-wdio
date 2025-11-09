@@ -1,8 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","4216","Clicking the 'Contact us' link opens it","Telnyx.com | Main page.","Sun Nov 09 10:52:04 UTC 2025","passed","Sun Nov 09 10:52:09 UTC 2025","","","",""
-"","4902","Changing the Role also changes the spoken text in the 'Text to speech' tab","Telnyx.com | Main page.","Sun Nov 09 10:51:59 UTC 2025","passed","Sun Nov 09 10:52:04 UTC 2025","","","",""
-"","8162","Clicking on a collapsible element reveals hidden text on the main page","Telnyx.com | Main page.","Sun Nov 09 10:52:09 UTC 2025","broken","Sun Nov 09 10:52:17 UTC 2025","","","",""
-"","3811","Clicking on the arrow reveals the next code example","Telnyx.com | Main page.","Sun Nov 09 10:52:18 UTC 2025","passed","Sun Nov 09 10:52:21 UTC 2025","","","",""
-"","63679","A relevant YouTube link is bound to every case on the ""Healthcare"" page","Telnyx.com | Solutions → Healthcare page.","Sun Nov 09 10:50:48 UTC 2025","broken","Sun Nov 09 10:51:52 UTC 2025","","","",""
-"","3319","Clicking on a collapsible element reveals hidden text on the 'Our Network' page","Telnyx.com | Why Telnyx → Our Network page.","Sun Nov 09 10:51:54 UTC 2025","passed","Sun Nov 09 10:51:57 UTC 2025","","","",""
-"","6587","Clicking the 'Start building for free' button opens the registration page","Telnyx.com | Products → Voice AI page.","Sun Nov 09 10:50:40 UTC 2025","passed","Sun Nov 09 10:50:46 UTC 2025","","","",""
