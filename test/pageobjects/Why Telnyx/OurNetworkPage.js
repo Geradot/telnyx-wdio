@@ -4,13 +4,12 @@ import { step } from "@wdio/allure-reporter";
 import { truncateByWords } from "../../helpers/utils";
 import navigation from "../../data/navigation.json";
 
-
 const amountFAQ = 5;
 
 class OurNetworkPage extends Page {
   constructor() {
     super();
-    
+
     this.whyTelnyx = navigation["why telnyx"];
     this.ourNetwork = this.whyTelnyx.submenu["our network"];
     const [firstKey, firstValue] = Object.entries(faq).at(0);
@@ -28,11 +27,13 @@ class OurNetworkPage extends Page {
 
   async getAnswer(text) {
     const section = await this.getFAQSection();
-    return await section.$(`p*=${text}`);
+    return await section.$(`//p[contains(normalize-space(text()), "${text}")]`);
   }
 
   async getFAQSection() {
-    const questionElement = await $(`*=${this.firstValue.question}`);
+    const questionElement = await $(
+      `//*[contains(normalize-space(text()), "${this.firstValue.question}")]`
+    );
     const parent = await questionElement.parentElement();
     return await parent.parentElement().parentElement();
   }
@@ -44,7 +45,9 @@ class OurNetworkPage extends Page {
 
   async getQuestion(question) {
     const section = await this.getFAQSection();
-    return await section.$(`*=${question}`);
+    return await section.$(
+      `//*[contains(normalize-space(text()), "${question}")]`
+    );
   }
 
   async checkQuestionOpened(question) {

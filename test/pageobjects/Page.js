@@ -22,7 +22,7 @@ class Page {
   }
 
   async getSectionByName(title) {
-    return await $(`*=${title}`);
+    return await $(`//*[contains(normalize-space(text()), "${title}")]`);
   }
 
   async scrollToSection(sectionName = "FOR DEVELOPERS") {
