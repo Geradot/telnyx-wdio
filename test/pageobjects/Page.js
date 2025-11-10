@@ -1,6 +1,5 @@
 import { step } from "@wdio/allure-reporter";
 import { expect } from "@wdio/globals";
-import navigation from "../data/navigation.json";
 
 class Page {
   // Common matches
