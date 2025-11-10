@@ -32,29 +32,6 @@ class Page {
     });
   }
 
-  /**
-   * Open a menu item
-   * @param {string} menu Navigation menu item
-   * @param {null | string} submenu Set if the menu has a submenu
-   */
-  async openTheMenuItem(menu, submenu = null) {
-    const label = submenu ? `"${menu}" → "${submenu}"` : `"${menu}"`;
-    await step(`Open ${label} menu item`, async () => {
-      const nav = await this.getNavItems;
-      await expect(nav).toBeDisplayed();
-
-      const item = await nav.$(`*=${menu}`);
-      await expect(item).toBeDisplayed();
-      await item.click();
-
-      if (submenu) {
-        const subItem = await nav.$(`*=${submenu}`);
-        await expect(subItem).toBeDisplayed();
-        await subItem.click();
-      }
-    });
-  }
-
   async checkUrl(expected) {
     await step(`URL contains "${expected}"`, async () => {
       await expect(browser).toHaveUrl(expect.stringContaining(expected));
@@ -92,6 +69,7 @@ class Page {
     await step("Close the cookies banner", async () => {
       const banner = await $("#onetrust-close-btn-container");
       await banner.waitForDisplayed();
+      await banner.waitForClickable();
       await banner.click({ force: true });
     });
   }

@@ -3,7 +3,6 @@ import ourNetworkPage from "../../pageobjects/Why Telnyx/OurNetworkPage";
 describe("Telnyx.com | Why Telnyx → Our Network page.", () => {
   beforeEach(async () => {
     await ourNetworkPage.open();
-
   });
   it("Clicking on a collapsible element reveals hidden text on the 'Our Network' page", async () => {
     await ourNetworkPage.checkFAQSectionVisible();
