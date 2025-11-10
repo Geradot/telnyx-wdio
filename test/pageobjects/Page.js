@@ -102,7 +102,6 @@ class Page {
       await browser.url(page.url);
       await this.checkThePage(page);
       await this.closeCookiesBanner();
-      await browser.pause(1000);
     });
   }
 }
